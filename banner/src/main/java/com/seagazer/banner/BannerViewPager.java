@@ -249,6 +249,9 @@ public class BannerViewPager extends RecyclerView {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             final ViewHolder viewHolder = outerAdapter.onCreateViewHolder(parent, viewType);
+            if (viewHolder.itemView.getLayoutParams().width != LayoutParams.MATCH_PARENT) {
+                throw new RuntimeException("The width of itemView must be MATCH_PARENT");
+            }
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
