@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * use {@link RecyclerView.Adapter} to provide page view and data.
  */
 public class BannerViewPager extends RecyclerView {
+    private static final int FIRST_POSITION = 1;
     private int touchSlop;
     private int downX, downY;
     private int currentPosition;
@@ -62,11 +63,12 @@ public class BannerViewPager extends RecyclerView {
                 int firstPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 currentPosition = firstPosition;
                 if (firstPosition == 0) {
-                    scrollToPosition(adapter.getItemCount() - 2);
-                    currentPosition = adapter.getItemCount() - 2;
+                    final int outerAdapterLastPosition = adapter.getItemCount() - 2;
+                    scrollToPosition(outerAdapterLastPosition);
+                    currentPosition = outerAdapterLastPosition;
                 } else if (firstPosition == adapter.getItemCount() - 1) {
-                    scrollToPosition(1);
-                    currentPosition = 1;
+                    scrollToPosition(FIRST_POSITION);
+                    currentPosition = FIRST_POSITION;
                 }
             }
         }
@@ -93,11 +95,10 @@ public class BannerViewPager extends RecyclerView {
 
     @Override
     public void setAdapter(@Nullable Adapter adapter) {
-        BannerAdapterWrapper wrapper = new BannerAdapterWrapper(adapter);
-        super.setAdapter(wrapper);
-        this.adapter = wrapper;
-        scrollToPosition(1);
-        currentPosition = 1;
+        this.adapter = new BannerAdapterWrapper(adapter);
+        super.setAdapter(this.adapter);
+        scrollToPosition(FIRST_POSITION);
+        currentPosition = FIRST_POSITION;
         if (lazySetListener) {
             this.adapter.setOnPageClickListener(this.onPageClickListener);
         }
@@ -154,7 +155,7 @@ public class BannerViewPager extends RecyclerView {
                 smoothScrollToPosition(next);
                 postDelayed(this, delay);
                 if (currentPosition == adapter.getItemCount() - 1) {
-                    currentPosition = 1;
+                    currentPosition = FIRST_POSITION;
                 }
             }
         }
@@ -233,6 +234,9 @@ public class BannerViewPager extends RecyclerView {
         void onPageClick(View view, int position);
     }
 
+    /**
+     * Adapter wrapper to handle looper.
+     */
     final class BannerAdapterWrapper extends RecyclerView.Adapter {
         private RecyclerView.Adapter outerAdapter;
         private OnPageClickListener onPageClickListener;
@@ -275,6 +279,23 @@ public class BannerViewPager extends RecyclerView {
         public int getItemCount() {
             // add first and last page
             return outerAdapter.getItemCount() + 2;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (outerAdapter == null || outerAdapter.getItemCount() == 0) {
+                return super.getItemViewType(position);
+            } else {
+                int realPosition;
+                if (position == 0) {
+                    realPosition = outerAdapter.getItemCount() - 1;
+                } else if (position == getItemCount() - 1) {
+                    realPosition = 0;
+                } else {
+                    realPosition = position - 1;
+                }
+                return outerAdapter.getItemViewType(realPosition);
+            }
         }
 
         void setOnPageClickListener(OnPageClickListener onPageClickListener) {
