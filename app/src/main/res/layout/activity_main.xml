@@ -12,4 +12,67 @@
         android:layout_height="200dp"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RadioGroup
+        android:id="@+id/orientation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/banner">
+
+        <RadioButton
+            android:id="@+id/horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="横向" />
+
+        <RadioButton
+            android:id="@+id/vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="垂直" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/orientation">
+
+        <RadioButton
+            android:id="@+id/sequence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="正序" />
+
+        <RadioButton
+            android:id="@+id/reverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="倒序" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/order">
+
+        <RadioButton
+            android:id="@+id/auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="自动" />
+
+        <RadioButton
+            android:id="@+id/hand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手动" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
