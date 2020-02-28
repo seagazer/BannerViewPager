@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.seagazer.banner.BannerViewPager;
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new BannerAdapter());
         viewPager.setAutoFlip(true);
         viewPager.setAutoFlipTime(3500);
+        viewPager.setReverseFlip(false);
+        viewPager.setOrientation(RecyclerView.VERTICAL);
         viewPager.setOnPageClickListener(new BannerViewPager.OnPageClickListener() {
             @Override
             public void onPageClick(View view, int position) {

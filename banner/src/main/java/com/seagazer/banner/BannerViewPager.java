@@ -29,6 +29,7 @@ public class BannerViewPager extends RecyclerView {
     private boolean autoFlip = false;
     private boolean lazySetListener = false;
     private OnPageClickListener onPageClickListener;
+    private boolean reverseFlip = false;
 
     public BannerViewPager(@NonNull Context context) {
         super(context);
@@ -105,6 +106,22 @@ public class BannerViewPager extends RecyclerView {
     }
 
     /**
+     * @param reverseFlip If true auto flip from current to pre, false current to next,
+     *                    default is false.
+     */
+    public void setReverseFlip(boolean reverseFlip) {
+        this.reverseFlip = reverseFlip;
+    }
+
+    /**
+     * @param orientation Should be {@link #HORIZONTAL} or {@link #VERTICAL}.
+     */
+    public void setOrientation(@RecyclerView.Orientation int orientation) {
+        layoutManager = new LinearLayoutManager(getContext(), orientation, false);
+        setLayoutManager(layoutManager);
+    }
+
+    /**
      * Scroll to a certain position.
      *
      * @param position     Scroll to this adapter position.
@@ -150,12 +167,22 @@ public class BannerViewPager extends RecyclerView {
         @Override
         public void run() {
             if (autoFlip) {
-                currentPosition++;
-                int next = currentPosition % adapter.getItemCount();
-                smoothScrollToPosition(next);
-                postDelayed(this, delay);
-                if (currentPosition == adapter.getItemCount() - 1) {
-                    currentPosition = FIRST_POSITION;
+                if (!reverseFlip) {
+                    currentPosition++;
+                    int next = currentPosition % adapter.getItemCount();
+                    smoothScrollToPosition(next);
+                    postDelayed(this, delay);
+                    if (currentPosition == adapter.getItemCount() - 1) {
+                        currentPosition = FIRST_POSITION;
+                    }
+                } else {
+                    currentPosition--;
+                    int pre = currentPosition % adapter.getItemCount();
+                    smoothScrollToPosition(pre);
+                    postDelayed(this, delay);
+                    if (currentPosition == 0) {
+                        currentPosition = adapter.getItemCount() - 1;
+                    }
                 }
             }
         }
