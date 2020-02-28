@@ -151,7 +151,14 @@ public class BannerViewPager extends RecyclerView {
      * @param autoFlip Auto flip to next.
      */
     public void setAutoFlip(boolean autoFlip) {
-        this.autoFlip = autoFlip;
+        if (this.autoFlip != autoFlip) {
+            if (!this.autoFlip) {
+                resumeAutoFlip();
+            } else {
+                pauseAutoFlip();
+            }
+            this.autoFlip = autoFlip;
+        }
     }
 
     /**
