@@ -30,6 +30,7 @@ public class BannerViewPager extends RecyclerView {
     private boolean lazySetListener = false;
     private OnPageClickListener onPageClickListener;
     private boolean reverseFlip = false;
+    private int orientation;
 
     public BannerViewPager(@NonNull Context context) {
         super(context);
@@ -117,6 +118,7 @@ public class BannerViewPager extends RecyclerView {
      * @param orientation Should be {@link #HORIZONTAL} or {@link #VERTICAL}.
      */
     public void setOrientation(@RecyclerView.Orientation int orientation) {
+        this.orientation = orientation;
         layoutManager = new LinearLayoutManager(getContext(), orientation, false);
         setLayoutManager(layoutManager);
     }
@@ -246,7 +248,8 @@ public class BannerViewPager extends RecyclerView {
             float curY = e.getY();
             float dx = Math.abs(curX - downX);
             float dy = Math.abs(curY - downY);
-            if (dx > dy && dx > touchSlop) {
+            if (orientation == RecyclerView.HORIZONTAL && dx > dy && dx > touchSlop ||
+                    orientation == RecyclerView.VERTICAL && dy > dx && dy > touchSlop) {
                 pauseAutoFlip();
             }
             downX = (int) curX;
